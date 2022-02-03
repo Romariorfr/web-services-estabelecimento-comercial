@@ -27,8 +27,8 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 
-	@OneToMany(mappedBy = "client")
 	@JsonIgnore
+	@OneToMany(mappedBy = "client")
 	private List<Order> orders = new ArrayList<>();
 
 	public User() {
@@ -41,6 +41,14 @@ public class User implements Serializable {
 		this.email = email;
 		this.phone = phone;
 		this.password = password;
+	}
+
+	public User(Long id, String name, String email, String phone) {
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+
 	}
 
 	public Long getId() {
