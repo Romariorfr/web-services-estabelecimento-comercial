@@ -3,6 +3,7 @@ package com.educandoweb.course.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +50,20 @@ public class UserService {
 
 	@Transactional
 	public User update(Long id, User obj) {
-		Optional<User> optional = repository.findById(id);
-		User entity = optional.get();
+		try {
+			Optional<User> entity = repository.findById(id);
+			updateData(entity.get(), obj);
+			return repository.save(entity.get());
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
+
+	}
+
+	private void updateData(User entity, User obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
 		entity.setPhone(obj.getPhone());
-		System.out.println("id:" + entity.getId());
-		return entity;
 
 	}
 
