@@ -3,6 +3,8 @@ package com.educandoweb.course.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,17 +36,18 @@ public class UserService {
 
 	}
 
+	@Transactional
 	public User update(Long id, User obj) {
-		User entity = repository.getById(id);
-		updateData(entity, obj);
-		return entity;
+		Optional<User> optional = repository.findById(id);
+		User entity = optional.get();
 
-	}
-
-	private void updateData(User entity, User obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
 		entity.setPhone(obj.getPhone());
+
+		System.out.println("id:" + entity.getId());
+
+		return entity;
 
 	}
 
